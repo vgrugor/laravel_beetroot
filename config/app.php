@@ -231,4 +231,6 @@ return [
 
     ],
 
+    'openWeatherMapAppId' => '89e57043cce948394af7b45c8bd819ad',
+
 ];
