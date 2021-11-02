@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WeatherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::view('/', 'home')->name('home');
+
+Route::prefix('/weather')->group(function () {
+
+    //Відповідь на 1 та 2 завдання, бо Київ за замовчуванням, а інше місто можна передати в get параметрі
+    Route::get('/city/{city?}', [WeatherController::class, 'showWeatherInCity'])
+        ->name('weatherCity');
+
+    Route::get('/select/{city?}', [WeatherController::class, 'selectCity'])
+        ->name('selectCity');
 });
