@@ -40,11 +40,9 @@ class WeatherStatistic extends Command
      */
     public function handle(): void
     {
-        $weather = $this->getWeatherInCities();
-
         $this->table(
             ['city', 'temp' , 'pressure', 'humidity', 'wind_speed'],
-            $weather,
+            $this->getWeatherInCities(),
         );
 
     }
