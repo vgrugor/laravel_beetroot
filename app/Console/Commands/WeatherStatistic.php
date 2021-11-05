@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\City;
 use App\Models\CityWeather;
+use App\Repositories\CityWeatherRepository;
 use App\Services\Weather\Formatter\ConsoleFormatter;
 use App\Services\Weather\WeatherClient;
 use Illuminate\Console\Command;
@@ -25,14 +26,20 @@ class WeatherStatistic extends Command
      */
     protected $description = 'Saves weather statistics for different cities to a database';
 
+
+    protected CityWeatherRepository $cityWeatherRepository;
+    protected WeatherClient $weatherClient;
+
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(CityWeatherRepository $cityWeatherRepository, WeatherClient $weatherClient)
     {
         parent::__construct();
+        $this->cityWeatherRepository = $cityWeatherRepository;
+        $this->weatherClient = $weatherClient;
     }
 
     /**
@@ -56,28 +63,11 @@ class WeatherStatistic extends Command
         $weatherInCities = [];
 
         foreach (City::all() as $city) {
-            $weather = (new WeatherClient())->getWeather($city->city);
+            $weather = $this->weatherClient->getWeather($city->city);
             $weatherInCities[] = (new ConsoleFormatter($city->city, $weather))->toArray();
-            $this->save($city->id, end($weatherInCities));
+            $this->cityWeatherRepository->saveWeather($city->id, end($weatherInCities));
         }
 
         return $weatherInCities;
-    }
-
-    /**
-     * @param int $cityId
-     * @param array $weather
-     */
-    private function save(int $cityId, array $weather): void
-    {
-        $cityWeather = new CityWeather();
-
-        $cityWeather->city_id = $cityId;
-        $cityWeather->temperature = $weather['temperature'];
-        $cityWeather->humidity = $weather['humidity'];
-        $cityWeather->pressure = $weather['pressure'];
-        $cityWeather->wind_speed = $weather['windSpeed'];
-
-        $cityWeather->save();
     }
 }
