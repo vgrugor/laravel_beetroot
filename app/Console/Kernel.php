@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\WeatherFetcher::class
+        Commands\WeatherFetcher::class,
+        Commands\WeatherStatistic::class,
     ];
 
     /**
