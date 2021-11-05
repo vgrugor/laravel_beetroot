@@ -13,6 +13,17 @@ use JsonException;
 class WeatherStatistic extends Command
 {
     /**
+     * Console table headers
+     */
+    private const TABLE_HEADER = [
+        'city',
+        'temp' ,
+        'pressure',
+        'humidity',
+        'wind_speed',
+    ];
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -26,8 +37,14 @@ class WeatherStatistic extends Command
      */
     protected $description = 'Saves weather statistics for different cities to a database';
 
-
+    /**
+     * @var CityWeatherRepository
+     */
     protected CityWeatherRepository $cityWeatherRepository;
+
+    /**
+     * @var WeatherClient
+     */
     protected WeatherClient $weatherClient;
 
     /**
@@ -48,10 +65,9 @@ class WeatherStatistic extends Command
     public function handle(): void
     {
         $this->table(
-            ['city', 'temp' , 'pressure', 'humidity', 'wind_speed'],
+            self::TABLE_HEADER,
             $this->getWeatherInCities(),
         );
-
     }
 
     /**
