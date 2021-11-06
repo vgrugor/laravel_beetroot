@@ -11,3 +11,5 @@ class CityWeather extends Model
 
     use HasFactory;
 }
+
+

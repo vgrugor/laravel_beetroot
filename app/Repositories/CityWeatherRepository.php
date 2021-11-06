@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\CityWeather;
+use App\Models\City;
 
 class CityWeatherRepository
 {
